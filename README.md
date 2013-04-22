@@ -1,4 +1,4 @@
-# Openid::Store::Mongo
+# OpenID::Store::Mongo
 
 MongoDB store for ruby-openid
 
