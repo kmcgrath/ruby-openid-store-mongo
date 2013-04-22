@@ -18,6 +18,9 @@ Or install it yourself as:
 
 ## Usage
 
+Initialize the store with a Mongo collection.  A TTL index will be created on the collection which will
+automatically remove expired entries.  This requires a Mongo instance of 2.2 or greater.
+
     client = MongoClient.new('localhost', 27017)
     db     = client['sample-db']
     coll   = db['ruby_openid']
