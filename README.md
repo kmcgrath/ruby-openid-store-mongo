@@ -1,12 +1,12 @@
 # Openid::Store::Mongo
 
-TODO: Write a gem description
+MongoDB store for ruby-openid
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'openid-store-mongo'
+    gem 'ruby-openid-store-mongo'
 
 And then execute:
 
@@ -14,11 +14,14 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install openid-store-mongo
+    $ gem install ruby-openid-store-mongo
 
 ## Usage
 
-TODO: Write usage instructions here
+    client = MongoClient.new('localhost', 27017)
+    db     = client['sample-db']
+    coll   = db['ruby_openid']
+    OpenID::Store::Mongo.new(:collection => coll)
 
 ## Contributing
 

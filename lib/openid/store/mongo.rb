@@ -17,6 +17,7 @@ module OpenID
 
       def initialize(options = {})
         self.collection = options[:collection]
+        self.collection.ensure_index('expiry',{ :expireAfterSeconds => 0 })
       end
 
       # Put a Association object into storage.
@@ -26,9 +27,6 @@ module OpenID
       def store_association(server_url, association)
         [nil, association.handle].each do |handle|
           key = assoc_key(server_url, handle)
-          Rails.logger.info(association.inspect)
-          Rails.logger.info("ASDFASFSADF: #{expiry(association.lifetime)}")
-          Rails.logger.info("ASDFASDFSDF: #{key}")
           collection.save({:_id => key, :value => association.serialize, :expiry => expiry(association.lifetime)})
         end
       end
@@ -71,7 +69,7 @@ module OpenID
         ts = timestamp.to_s # base 10 seconds since epoch
         nonce_key = 'N' + server_url + '|' + ts + '|' + salt
         begin 
-          result = collection.insert({:_id=>nonce_key, :value=> '', :expiry => expiry(Nonce.skew + 5)})
+          result = collection.insert({:_id=>nonce_key, :expiry => expiry(Nonce.skew + 5)})
           return true
         rescue
           return false
@@ -101,9 +99,9 @@ module OpenID
         result = collection.remove({:_id => key})
       end
 
-      # Convert a lifetime in seconds into a memcache expiry value
+      # Convert a lifetime in seconds into a expiry value
       def expiry(t)
-        Time.now.to_i + t
+        Time.now + t
       end
 
     end
